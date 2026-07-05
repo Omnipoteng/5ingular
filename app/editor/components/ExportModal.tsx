@@ -26,45 +26,37 @@ export default function ExportModal({ onClose }: ExportModalProps) {
     const docWidth = canvasPreset.width;
     const docHeight = canvasPreset.height;
 
-    // Locate the document-background rect so we can hide it for transparent exports
+    // Locate the document-background rect
     const docBg: any = canvas
       .getObjects()
       .find((o: any) => o.id === "__docbg__");
 
-    // --- Snapshot current state ---
-    const savedVpt = [...canvas.viewportTransform!] as [
-      number, number, number, number, number, number
-    ];
-    const savedW = canvas.width!;
-    const savedH = canvas.height!;
-    const savedBg = canvas.backgroundColor;
-
     try {
-      // Reset viewport so the document fills the canvas at export scale
-      canvas.setViewportTransform([scale, 0, 0, scale, 0, 0]);
-      canvas.setDimensions({
-        width: docWidth * scale,
-        height: docHeight * scale,
-      });
-
-      // Handle transparency
+      // Handle transparency: hide or show the docBg fill
       if (transparent && format !== "JPG") {
-        canvas.backgroundColor = "";
         if (docBg) docBg.visible = false;
       } else {
-        canvas.backgroundColor = "#ffffff";
         if (docBg) {
           docBg.visible = true;
-          docBg.set("fill", "#ffffff");
+          // Restore the original fill — read from the stored object
+          // (bgColor might be black, white, etc.)
+          // We do NOT force it to white here.
         }
       }
       canvas.renderAll();
 
+      // Use scene-space crop: the document always sits at (0,0) in scene space
+      // with dimensions (docWidth x docHeight). The multiplier handles scale.
+      // This approach does NOT mutate the viewport or canvas dimensions.
       const dataURL = canvas.toDataURL({
         format: (format === "JPG" ? "jpeg" : format.toLowerCase()) as any,
         quality: quality / 100,
-        multiplier: 1,
-      });
+        multiplier: scale,
+        left: 0,
+        top: 0,
+        width: docWidth,
+        height: docHeight,
+      } as any);
 
       const link = document.createElement("a");
       link.download = `singular-export-${Date.now()}.${format.toLowerCase()}`;
@@ -78,18 +70,13 @@ export default function ExportModal({ onClose }: ExportModalProps) {
         "Gagal mengekspor. Pastikan tidak ada gambar eksternal yang melanggar kebijakan CORS."
       );
     } finally {
-      // Restore everything
-      if (docBg) {
-        docBg.visible = true;
-        docBg.set("fill", "#ffffff");
-      }
-      canvas.setDimensions({ width: savedW, height: savedH });
-      canvas.setViewportTransform(savedVpt);
-      canvas.backgroundColor = savedBg;
+      // Restore docBg visibility
+      if (docBg) docBg.visible = true;
       canvas.renderAll();
       onClose();
     }
   };
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/40 backdrop-blur-sm p-4">

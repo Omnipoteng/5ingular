@@ -10,9 +10,5 @@ export default function EditorLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="w-screen h-screen overflow-hidden bg-zinc-100 select-none flex flex-col">
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }

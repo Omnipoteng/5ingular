@@ -16,6 +16,8 @@ export interface CanvasPreset {
   name: string;
   width: number;
   height: number;
+  bgColor?: string;
+  dpi?: number;
 }
 
 export interface Layer {

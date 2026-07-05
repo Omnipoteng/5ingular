@@ -139,23 +139,42 @@ export default function LayersPanel() {
     list.splice(targetIndex, 0, moved);
     reorderLayers(list);
 
-    // Sync layers ordering on Fabric canvas.
-    // Fabric draws objects from bottom of list (index 0) to top.
-    // In UI, top layer is index 0 of array, so we must reverse the list order.
+    // Sync Fabric canvas z-order to match the panel order.
+    // Panel: index 0 = topmost layer visually.
+    // Fabric: objects rendered in _objects order, last index = top.
+    // So the panel list reversed = Fabric bottom-to-top order.
+    // We skip __docbg__ (always stays at index 0 / bottom).
     if (canvasRef.current) {
-      const reversedLayers = [...list].reverse();
-      const canvasObjects = canvasRef.current.getObjects();
-      
-      reversedLayers.forEach((layer, idx) => {
-        const obj: any = canvasObjects.find((o: any) => o.id === layer.id);
-        if (obj) {
-          obj.moveTo(idx);
-        }
+      const canvas = canvasRef.current;
+      const allObjs = canvas.getObjects();
+
+      // Build an ordered array of Fabric objects matching our desired order.
+      // list[0] = top layer -> should be last in Fabric array.
+      // list[list.length-1] = bottom layer -> should be just above docbg.
+      const orderedForFabric = [...list].reverse(); // bottom-to-top order
+
+      // Remove all non-docbg objects from canvas (temporarily)
+      const docBg = allObjs.find((o: any) => o.id === "__docbg__");
+      const userObjs = allObjs.filter((o: any) => o.id !== "__docbg__");
+
+      // Remove all user objects
+      userObjs.forEach((o) => canvas.remove(o));
+
+      // Re-add in correct bottom-to-top order
+      orderedForFabric.forEach((layer) => {
+        const obj = userObjs.find((o: any) => o.id === layer.id);
+        if (obj) canvas.add(obj);
       });
-      canvasRef.current.renderAll();
+
+      // Ensure docbg stays at the very bottom
+      if (docBg) canvas.sendObjectToBack(docBg);
+
+      canvas.discardActiveObject();
+      canvas.renderAll();
       setDirty(true);
     }
   };
+
 
   return (
     <aside data-tour="layers-panel" className="w-64 bg-white border-r border-zinc-200 flex flex-col z-10 shadow-sm">

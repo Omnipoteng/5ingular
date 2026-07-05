@@ -51,7 +51,7 @@ export default function TopToolbar() {
         const bg = new fabric.Rect({
           left: 0, top: 0,
           width: preset.width, height: preset.height,
-          fill: "#ffffff",
+          fill: preset.bgColor || "#ffffff",
           selectable: false, evented: false,
           hasControls: false, hasBorders: false,
           hoverCursor: "default",

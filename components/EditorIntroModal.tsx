@@ -29,6 +29,25 @@ export default function EditorIntroModal({ onClose }: EditorIntroModalProps) {
 
   const steps = [
     {
+      title: "Memperkenalkan 5ingular Editor",
+      subtitle: "Versi 0.1.0 (BETA)",
+      desc: "5ingular Editor adalah workspace desain grafis & photo editing premium berbasis web yang dirancang dengan interaksi sekelas Figma. Mari ikuti panduan singkat ini untuk melihat fitur-fitur utama di dalamnya!",
+      icon: <Sparkles className="w-5 h-5 text-blue-600 animate-pulse" />,
+      visual: (
+        <div className="flex flex-col items-center justify-center text-center p-6 w-full h-[170px] bg-gradient-to-tr from-blue-50/50 to-indigo-50/50 border border-blue-100 rounded-2xl shadow-inner select-none gap-2">
+          <span className="text-xl font-bold tracking-tight text-zinc-900">
+            5ingular <span className="text-blue-600">Editor</span>
+          </span>
+          <span className="px-2.5 py-1 rounded-full bg-blue-100/80 text-[10px] font-extrabold text-blue-700 tracking-wider uppercase shadow-sm">
+            v0.1.0 (BETA)
+          </span>
+          <p className="text-[10px] text-zinc-400 font-light max-w-xs mt-1">
+            Creative Digital Workspace by 5ingular Graphic.
+          </p>
+        </div>
+      )
+    },
+    {
       title: "1. Manajemen Layer Utama",
       subtitle: "Susun & Organisasikan Elemen Kreatif",
       desc: "Sama seperti Figma, kelola susunan tumpukan objek melalui panel layer sebelah kiri. Sembunyikan dengan ikon mata, kunci posisi agar tidak sengaja bergeser dengan ikon gembok, atau drag untuk merapikan susunan layer.",

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
 import { useEditorStore } from "@/lib/editor/editorStore";
 import { useHistoryStore } from "@/lib/editor/historyStore";
@@ -37,6 +37,7 @@ export default function CanvasWorkspace() {
     activeTool,
     setActiveTool,
     canvasPreset,
+    setCanvasPreset,
     zoom,
     setZoom,
     gridEnabled,
@@ -50,6 +51,30 @@ export default function CanvasWorkspace() {
   } = useEditorStore();
 
   const { pushSnapshot } = useHistoryStore();
+
+  // ── Read preset from localStorage once, synchronously on first render ───────
+  // This is the single source of truth for new canvas dimensions/bgColor.
+  // useState initializer runs exactly once before the first render.
+  const [initPreset] = useState<typeof canvasPreset>(() => {
+    if (typeof window === "undefined") return canvasPreset;
+    try {
+      const str = localStorage.getItem("singular_editor_preset");
+      if (str) {
+        const p = JSON.parse(str);
+        // Must have valid numeric dimensions
+        if (p && Number(p.width) > 0 && Number(p.height) > 0) {
+          return {
+            name: p.name || "Custom",
+            width: Number(p.width),
+            height: Number(p.height),
+            bgColor: p.bgColor !== undefined ? p.bgColor : "#ffffff",
+            dpi: p.dpi ? Number(p.dpi) : 300,
+          };
+        }
+      }
+    } catch {}
+    return canvasPreset;
+  });
 
   // ─── Refs to avoid stale closures inside Fabric event handlers ───────────
   const activeToolRef = useRef(activeTool);
@@ -71,8 +96,11 @@ export default function CanvasWorkspace() {
     if (!canvasElementRef.current || !containerRef.current) return;
 
     const container = containerRef.current;
-    const docWidth = canvasPreset.width;
-    const docHeight = canvasPreset.height;
+    // Use initPreset (from localStorage) so user-configured size is respected
+    const docWidth = initPreset.width;
+    const docHeight = initPreset.height;
+    // Sync the Zustand store once so TopToolbar / StatusBar show correct dimensions
+    setCanvasPreset(initPreset);
     // Use the actual container size (flex-1 will fill the remaining space)
     const containerW = Math.max(container.clientWidth || 0, 600);
     const containerH = Math.max(container.clientHeight || 0, 400);
@@ -97,7 +125,9 @@ export default function CanvasWorkspace() {
         top: 0,
         width: docWidth,
         height: docHeight,
-        fill: "#ffffff",
+        fill: initPreset.bgColor !== undefined && initPreset.bgColor !== ""
+          ? initPreset.bgColor
+          : "#ffffff",
         selectable: false,
         evented: false,
         hasControls: false,
@@ -311,7 +341,7 @@ export default function CanvasWorkspace() {
         canvas.setActiveObject(textObj);
         textObj.enterEditing();
         canvas.renderAll();
-        // Don't switch to select yet — user is actively typing
+        // hanya aku dan tuhan yang tau struktur code ini 
         return;
       }
 
