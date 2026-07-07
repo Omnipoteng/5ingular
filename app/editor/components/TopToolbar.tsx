@@ -32,6 +32,7 @@ export default function TopToolbar() {
     toggleSnap,
     isDirty,
     setDirty,
+    projectName,
   } = useEditorStore();
 
   const { canUndo, canRedo, undo, redo } = useHistoryStore();
@@ -43,7 +44,8 @@ export default function TopToolbar() {
   const restoreSnapshot = (json: string) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    canvas.loadFromJSON(json, () => {
+    (canvas as any).historyLoading = true;
+    canvas.loadFromJSON(json).then(() => {
       // Ensure the white document background is always present and at the back
       const hasBg = canvas.getObjects().some((o: any) => o.id === "__docbg__");
       if (!hasBg) {
@@ -61,6 +63,11 @@ export default function TopToolbar() {
         canvas.sendObjectToBack(bg);
       }
       canvas.renderAll();
+      (canvas as any).historyLoading = false;
+      (canvas as any).fire("history:restored");
+    }).catch((err) => {
+      console.error("Gagal melakukan undo/redo restore:", err);
+      (canvas as any).historyLoading = false;
     });
   };
 
@@ -105,8 +112,8 @@ export default function TopToolbar() {
             5ingular <span className="text-blue-600">Editor</span>
           </span>
           <div className="h-4 w-px bg-zinc-200" />
-          <span className="text-xs font-light text-zinc-400">
-            Untitled Project
+          <span className="text-xs font-light text-zinc-400 max-w-[160px] truncate">
+            {projectName}
           </span>
           {isDirty && (
             <span className="w-1.5 h-1.5 rounded-full bg-amber-500" title="Unsaved changes" />

@@ -74,6 +74,7 @@ const megaMenus: Record<
       heading: "Directory",
       items: [
         { label: "Agents Directory", desc: "Daftar talenta kreatif resmi", href: "/agents" },
+        { label: "Daftar Menjadi Agen", desc: "Bergabung sebagai agent resmi kami", href: "/agents/join" },
       ],
     },
     {

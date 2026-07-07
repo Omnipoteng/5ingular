@@ -185,7 +185,7 @@ export default function CanvasWorkspace() {
       try {
         const savedData = JSON.parse(savedStr);
         isLoading = true;
-        canvas.loadFromJSON(savedData, () => {
+        canvas.loadFromJSON(savedData).then(() => {
           isLoading = false;
           // loadFromJSON clears everything; re-add the doc background
           const bg = createDocBg();
@@ -193,6 +193,12 @@ export default function CanvasWorkspace() {
           canvas.sendObjectToBack(bg);
           canvas.renderAll();
           syncLayers();
+          pushSnapshot(JSON.stringify((canvas as any).toJSON(["id", "name"])));
+        }).catch((err) => {
+          console.error("Gagal memuat canvas dari local storage:", err);
+          isLoading = false;
+          const bg = createDocBg();
+          canvas.add(bg);
           pushSnapshot(JSON.stringify((canvas as any).toJSON(["id", "name"])));
         });
       } catch {
@@ -209,7 +215,7 @@ export default function CanvasWorkspace() {
 
     // ── Canvas object events ────────────────────────────────────────────────
     canvas.on("object:added", (opt: any) => {
-      if (isLoading) return;
+      if (isLoading || (canvas as any).historyLoading) return;
       if ((opt.target as any)?.id === DOC_BG_ID) return;
       syncLayers();
       setDirty(true);
@@ -217,6 +223,7 @@ export default function CanvasWorkspace() {
     });
 
     canvas.on("object:removed", (opt: any) => {
+      if (isLoading || (canvas as any).historyLoading) return;
       if ((opt.target as any)?.id === DOC_BG_ID) return;
       syncLayers();
       setDirty(true);
@@ -224,8 +231,14 @@ export default function CanvasWorkspace() {
     });
 
     canvas.on("object:modified", () => {
+      if ((canvas as any).historyLoading) return;
       setDirty(true);
       pushSnapshot(JSON.stringify((canvas as any).toJSON(["id", "name"])));
+    });
+
+    canvas.on("history:restored" as any, () => {
+      syncLayers();
+      setDirty(true);
     });
 
     // Auto-rename text layers from their content (up to 25 chars)
@@ -364,6 +377,8 @@ export default function CanvasWorkspace() {
             height: 1,
             fill: "#3b82f6",
             strokeWidth: 0,
+            originX: "left",
+            originY: "top",
             rx: 0,
             ry: 0,
             id,
@@ -373,10 +388,12 @@ export default function CanvasWorkspace() {
           activeShape = new fabric.Ellipse({
             left: pointer.x,
             top: pointer.y,
-            rx: 0,
-            ry: 0,
+            rx: 1,
+            ry: 1,
             fill: "#10b981",
             strokeWidth: 0,
+            originX: "left",
+            originY: "top",
             id,
             name: `Circle ${count}`,
           } as any);
@@ -421,19 +438,20 @@ export default function CanvasWorkspace() {
           activeShape.set({
             left: Math.min(pointer.x, drawStart.x),
             top: Math.min(pointer.y, drawStart.y),
-            width: Math.abs(dx),
-            height: Math.abs(dy),
+            width: Math.max(1, Math.abs(dx)),
+            height: Math.max(1, Math.abs(dy)),
           });
         } else if (tool === "circle") {
           activeShape.set({
             left: Math.min(pointer.x, drawStart.x),
             top: Math.min(pointer.y, drawStart.y),
-            rx: Math.abs(dx) / 2,
-            ry: Math.abs(dy) / 2,
+            rx: Math.max(0.5, Math.abs(dx) / 2),
+            ry: Math.max(0.5, Math.abs(dy) / 2),
           });
         } else if (tool === "line") {
           activeShape.set({ x2: pointer.x, y2: pointer.y });
         }
+        activeShape.setCoords();
         canvas.renderAll();
       }
     });
@@ -461,12 +479,24 @@ export default function CanvasWorkspace() {
           (activeShape.ry ? activeShape.ry * 2 : 0);
 
         if (tool === "rect" && (w < 5 || h < 5)) {
-          activeShape.set({ width: 100, height: 100 });
+          // Centered at drawStart position
+          activeShape.set({
+            left: drawStart.x - 50,
+            top: drawStart.y - 50,
+            width: 100,
+            height: 100,
+          });
         } else if (
           tool === "circle" &&
           ((activeShape.rx || 0) < 3 || (activeShape.ry || 0) < 3)
         ) {
-          activeShape.set({ rx: 50, ry: 50 });
+          // Centered at drawStart position
+          activeShape.set({
+            left: drawStart.x - 50,
+            top: drawStart.y - 50,
+            rx: 50,
+            ry: 50,
+          });
         }
 
         activeShape.setCoords();

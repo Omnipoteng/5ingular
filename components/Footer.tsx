@@ -12,8 +12,8 @@ export default function Footer() {
       { name: "Services", href: "#services" },
     ],
     Legal: [
-      { name: "Privacy Policy", href: "#" },
-      { name: "Terms of Service", href: "#" },
+      { name: "Terms of Service", href: "/terms" },
+      { name: "Editor Protection", href: "/protection" },
     ],
   };
 

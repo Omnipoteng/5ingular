@@ -1,120 +1,135 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import GradientText from "./GradientText";
 
+// List of phrases to cycle through endlessly
+const PHRASES = [
+  "Creative Digital Agency",
+  "5ingular Graphic",
+  "Desainer Profesional",
+  "Kreator Visual Premium",
+];
+
 export default function Hero() {
-  const [text, setText] = useState("");
-  const [phase, setPhase] = useState(0); // 0: typing 1st, 1: deleting, 2: typing 2nd, 3: completed
-  const [cursorBlinking, setCursorBlinking] = useState(true);
+  const [displayText, setDisplayText] = useState("");
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [cursorVisible, setCursorVisible] = useState(true);
 
-  const text1 = "5ingular Graphic";
-  const text2 = "Creative Digital Agency";
-
+  // Blink cursor independently
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    const blink = setInterval(() => setCursorVisible((v) => !v), 530);
+    return () => clearInterval(blink);
+  }, []);
 
-    if (phase === 0) {
-      if (text.length < text1.length) {
-        timer = setTimeout(() => {
-          setText(text1.substring(0, text.length + 1));
-        }, 80);
+  // Typewriter loop
+  useEffect(() => {
+    const current = PHRASES[phraseIndex];
+    let delay: number;
+
+    if (!isDeleting) {
+      if (displayText.length < current.length) {
+        delay = 75;
+        const t = setTimeout(() => {
+          setDisplayText(current.slice(0, displayText.length + 1));
+        }, delay);
+        return () => clearTimeout(t);
       } else {
-        timer = setTimeout(() => {
-          setPhase(1);
-        }, 1200);
+        // Finished typing — wait, then start deleting
+        const t = setTimeout(() => setIsDeleting(true), 1800);
+        return () => clearTimeout(t);
       }
-    } else if (phase === 1) {
-      if (text.length > 0) {
-        timer = setTimeout(() => {
-          setText(text.substring(0, text.length - 1));
-        }, 40);
+    } else {
+      if (displayText.length > 0) {
+        delay = 38;
+        const t = setTimeout(() => {
+          setDisplayText(current.slice(0, displayText.length - 1));
+        }, delay);
+        return () => clearTimeout(t);
       } else {
-        timer = setTimeout(() => {
-          setPhase(2);
-        }, 300);
-      }
-    } else if (phase === 2) {
-      if (text.length < text2.length) {
-        timer = setTimeout(() => {
-          setText(text2.substring(0, text.length + 1));
-        }, 80);
-      } else {
-        setCursorBlinking(false);
-        setPhase(3);
+        // Finished deleting — move to next phrase
+        setIsDeleting(false);
+        setPhraseIndex((i) => (i + 1) % PHRASES.length);
       }
     }
-
-    return () => clearTimeout(timer);
-  }, [text, phase]);
+  }, [displayText, isDeleting, phraseIndex]);
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center pt-28 pb-20 overflow-hidden bg-white bg-grid-pattern"
+      className="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden bg-white bg-grid-pattern"
     >
-      {/* Background glow accent */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-blue-50/70 blur-3xl -z-10" />
+      {/* Background glow */}
+      <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-blue-50/70 blur-3xl -z-10" />
 
-      <div className="max-w-5xl mx-auto px-6 md:px-12 flex flex-col items-center text-center gap-8 z-10">
-        {/* Visual Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-zinc-50 border border-zinc-200/60 shadow-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
-            5ingular Graphic
-          </span>
-        </div>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
-        {/* Headline with Embedded Typing Animation */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-900 leading-[1.08] max-w-4xl min-h-[1.2em]">
-          <GradientText>{text}</GradientText>
-          <span
-            className={`inline-block w-[3px] h-[0.9em] ml-1 bg-blue-600 align-middle ${
-              cursorBlinking ? "animate-cursor-blink" : "cursor-noblink"
-            }`}
-            style={{ marginBottom: "0.15em" }}
-          />
-        </h1>
+          {/* ── Left: Text + CTA ── */}
+          <div className="flex flex-col items-start text-left gap-7 flex-1 z-10">
 
-        {/* Subheading */}
-        <p className="text-base sm:text-lg md:text-xl text-zinc-500 max-w-2xl font-light leading-relaxed">
-         Kami membangun sistem desain premium, pengalaman web elit, dan branding digital khusus yang membedakan organisasi Anda.
-        </p>
+            {/* Headline — cursor inline setelah teks */}
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 leading-tight">
+              {/*
+                Trick: GradientText renders inline-block yang bisa wrap.
+                Kita bungkus dalam satu <span> whitespace-nowrap agar
+                cursor selalu nempel di ujung teks baris terakhir.
+                Tapi karena teks bisa panjang, kita pisahkan pendekatan:
+                render teks + cursor langsung dalam h1 tanpa wrapper inline-block
+              */}
+              <span className="relative">
+                <GradientText>{displayText || "\u00A0"}</GradientText>
+                <span
+                  aria-hidden="true"
+                  className="inline-block w-[3px] bg-blue-600 ml-[2px]"
+                  style={{
+                    height: "0.85em",
+                    verticalAlign: "middle",
+                    marginBottom: "0.12em",
+                    opacity: cursorVisible ? 1 : 0,
+                    transition: "opacity 0.1s",
+                  }}
+                />
+              </span>
+            </h1>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-2">
-          <a
-            href="/editor"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-full shadow-lg shadow-blue-100"
-          >
-            Mulai Proyek
-            <ArrowUpRight size={16} />
-          </a>
-          <a
-            href="#portfolio"
-            className="inline-flex items-center justify-center px-8 py-3 text-sm font-semibold uppercase tracking-wider text-zinc-700 bg-zinc-50 hover:bg-zinc-100 transition-colors rounded-full border border-zinc-200"
-          >
-            Lihat Pekerjaan 
-          </a>
-        </div>
+            {/* Subheading */}
+            <p className="text-base sm:text-lg text-zinc-500 max-w-lg font-light leading-relaxed">
+              Kami membangun sistem desain premium, pengalaman web elit, dan branding digital khusus yang membedakan organisasi Anda.
+            </p>
 
-        {/* Hero Preview Mockup */}
-        <div className="relative w-full max-w-4xl mt-12 group">
-          {/* Glassmorphic border glow */}
-          <div className="absolute -inset-1.5 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-500 opacity-5 blur-lg transition-opacity duration-500 group-hover:opacity-10" />
-          
-          <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white/50 backdrop-blur-sm p-2 shadow-2xl">
-            <Image
-              src="/images/hero_mockup.png"
-              alt="Digital Design Mockup Showcase"
-              width={1600}
-              height={900}
-              className="w-full rounded-xl object-cover shadow-inner"
-              priority
+            {/* CTA */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-1">
+              <a
+                href="/editor"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-full shadow-lg shadow-blue-100"
+              >
+                Mulai Proyek
+                <ArrowUpRight size={16} />
+              </a>
+              <a
+                href="#portfolio"
+                className="inline-flex items-center justify-center px-8 py-3 text-sm font-semibold uppercase tracking-wider text-zinc-700 bg-zinc-50 hover:bg-zinc-100 transition-colors rounded-full border border-zinc-200"
+              >
+                Lihat Pekerjaan
+              </a>
+            </div>
+          </div>
+
+          {/* ── Right: Looping Video ── */}
+          <div className="flex-1 w-full lg:w-auto z-10">
+            <video
+              src="/video/5ingular.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-auto object-cover rounded-2xl"
             />
           </div>
+
         </div>
       </div>
     </section>

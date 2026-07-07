@@ -36,6 +36,23 @@ export default function AgentsDirectoryPage() {
               <AgentCard key={agent.id} agent={agent} index={index} />
             ))}
           </div>
+
+          {/* Join CTA */}
+          <div className="mt-20 flex flex-col sm:flex-row items-center justify-between gap-6 p-8 bg-zinc-50 border border-zinc-200 rounded-2xl">
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Open Recruitment</span>
+              <h2 className="text-xl font-bold text-zinc-900">Ingin menjadi bagian dari tim kami?</h2>
+              <p className="text-sm text-zinc-500 font-light">
+                Kami membuka pendaftaran agent kreatif baru. Daftarkan diri Anda sekarang dan mulai berkarir bersama 5ingular Graphic.
+              </p>
+            </div>
+            <a
+              href="/agents/join"
+              className="flex-shrink-0 inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-full shadow-lg shadow-blue-100"
+            >
+              Daftar Menjadi Agen
+            </a>
+          </div>
         </div>
       </main>
       <Footer />

@@ -5,6 +5,8 @@ import { X, Download, Sliders } from "lucide-react";
 import { useCanvas } from "@/lib/editor/canvasContext";
 import { useEditorStore } from "@/lib/editor/editorStore";
 
+import * as fabric from "fabric";
+
 interface ExportModalProps {
   onClose: () => void;
 }
@@ -19,44 +21,46 @@ export default function ExportModal({ onClose }: ExportModalProps) {
   const [scale, setScale] = useState(1);
   const [transparent, setTransparent] = useState(false);
 
-  const handleExport = () => {
+  const handleExport = async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const docWidth = canvasPreset.width;
     const docHeight = canvasPreset.height;
 
-    // Locate the document-background rect
-    const docBg: any = canvas
-      .getObjects()
-      .find((o: any) => o.id === "__docbg__");
-
     try {
-      // Handle transparency: hide or show the docBg fill
-      if (transparent && format !== "JPG") {
-        if (docBg) docBg.visible = false;
-      } else {
-        if (docBg) {
-          docBg.visible = true;
-          // Restore the original fill — read from the stored object
-          // (bgColor might be black, white, etc.)
-          // We do NOT force it to white here.
+      // Serialize current canvas objects
+      const canvasJson = (canvas as any).toJSON(["id", "name"]);
+
+      // Create an offscreen canvas element and load the JSON
+      const el = document.createElement("canvas");
+      const tempCanvas = new fabric.StaticCanvas(el, {
+        width: docWidth,
+        height: docHeight,
+      });
+
+      await (tempCanvas as any).loadFromJSON(canvasJson);
+
+      // Locate the document-background rect in the temp canvas
+      const tempBg: any = tempCanvas
+        .getObjects()
+        .find((o: any) => o.id === "__docbg__");
+
+      if (tempBg) {
+        if (transparent && format !== "JPG") {
+          tempBg.visible = false;
+        } else {
+          tempBg.visible = true;
         }
       }
-      canvas.renderAll();
 
-      // Use scene-space crop: the document always sits at (0,0) in scene space
-      // with dimensions (docWidth x docHeight). The multiplier handles scale.
-      // This approach does NOT mutate the viewport or canvas dimensions.
-      const dataURL = canvas.toDataURL({
+      tempCanvas.renderAll();
+
+      const dataURL = tempCanvas.toDataURL({
         format: (format === "JPG" ? "jpeg" : format.toLowerCase()) as any,
         quality: quality / 100,
         multiplier: scale,
-        left: 0,
-        top: 0,
-        width: docWidth,
-        height: docHeight,
-      } as any);
+      });
 
       const link = document.createElement("a");
       link.download = `singular-export-${Date.now()}.${format.toLowerCase()}`;
@@ -64,15 +68,14 @@ export default function ExportModal({ onClose }: ExportModalProps) {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      await tempCanvas.dispose();
     } catch (err) {
       console.error("Failed to export canvas:", err);
       alert(
         "Gagal mengekspor. Pastikan tidak ada gambar eksternal yang melanggar kebijakan CORS."
       );
     } finally {
-      // Restore docBg visibility
-      if (docBg) docBg.visible = true;
-      canvas.renderAll();
       onClose();
     }
   };
