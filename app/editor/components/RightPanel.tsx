@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { useEditorStore } from "@/lib/editor/editorStore";
@@ -9,8 +9,30 @@ export default function RightPanel() {
   const { selectedObjectType, setDirty, canvasPreset, setCanvasPreset } = useEditorStore();
   const { canvasRef } = useCanvas();
 
+  const [panelWidth, setPanelWidth] = useState(272); // 272px is standard w-68
+
+  const startResizing = (mouseDownEvent: React.MouseEvent) => {
+    mouseDownEvent.preventDefault();
+    const startWidth = panelWidth;
+    const startX = mouseDownEvent.clientX;
+
+    const doDrag = (mouseMoveEvent: MouseEvent) => {
+      // For right panel, dragging left increases width, so we subtract difference
+      const newWidth = Math.max(220, Math.min(500, startWidth - (mouseMoveEvent.clientX - startX)));
+      setPanelWidth(newWidth);
+    };
+
+    const stopDrag = () => {
+      window.removeEventListener("mousemove", doDrag);
+      window.removeEventListener("mouseup", stopDrag);
+    };
+
+    window.addEventListener("mousemove", doDrag);
+    window.addEventListener("mouseup", stopDrag);
+  };
+
   // Selected Object Properties State
-  const [fill, setFill] = useState("#2563eb");
+  const [fill, setFill] = useState("#18cc03");
   const [stroke, setStroke] = useState("#000000");
   const [strokeWidth, setStrokeWidth] = useState(0);
   const [opacity, setOpacity] = useState(1);
@@ -36,7 +58,7 @@ export default function RightPanel() {
     const active = canvas.getActiveObject();
     if (!active) return;
 
-    setFill((active.get("fill") as string) || "#2563eb");
+    setFill((active.get("fill") as string) || "#18cc03");
     setStroke(active.get("stroke") || "#000000");
     setStrokeWidth(active.get("strokeWidth") || 0);
     setOpacity(active.get("opacity") ?? 1);
@@ -137,7 +159,11 @@ export default function RightPanel() {
   };
 
   return (
-    <aside data-tour="properties-panel" className="w-68 bg-white border-l border-zinc-200 flex flex-col z-10 shadow-sm overflow-y-auto">
+    <aside
+      data-tour="properties-panel"
+      className="relative bg-white border-l border-zinc-200 flex flex-col z-10 shadow-sm overflow-y-auto"
+      style={{ width: panelWidth }}
+    >
       <div className="px-5 py-4 border-b border-zinc-200 flex items-center gap-2 bg-zinc-50/50">
         <Settings size={14} className="text-blue-600" />
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-700">Properties</h3>
@@ -152,7 +178,7 @@ export default function RightPanel() {
                 Workspace Background
               </span>
               <div className="flex flex-wrap gap-2 mt-1">
-                {["#ffffff", "#f4f4f5", "#e4e4e7", "#d4d4d8", "#18181b", "#2563eb", "#38bdf8"].map((c) => (
+                {["#ffffff", "#f4f4f5", "#e4e4e7", "#d4d4d8", "#18181b", "#18cc03", "#38bdf8"].map((c) => (
                   <button
                     key={c}
                     onClick={() => handleCanvasBgChange(c)}
@@ -422,6 +448,12 @@ export default function RightPanel() {
           </div>
         )}
       </div>
+
+      {/* Resize Handle (Left border) */}
+      <div
+        onMouseDown={startResizing}
+        className="absolute top-0 left-0 w-1.5 h-full cursor-col-resize hover:bg-blue-500/30 active:bg-blue-600 transition-colors z-20"
+      />
     </aside>
   );
 }

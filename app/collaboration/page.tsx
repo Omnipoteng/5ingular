@@ -20,7 +20,7 @@ export default function CollaborationPage() {
   return (
     <>
       <Navbar />
-      <main className="w-full min-h-screen bg-white">
+      <main className="w-full min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white">
         <Hero />
         <AboutCollaboration />
         <Workflow />

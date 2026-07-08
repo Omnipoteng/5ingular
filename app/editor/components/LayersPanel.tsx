@@ -19,6 +19,26 @@ export default function LayersPanel() {
   const { canvasRef } = useCanvas();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
+  const [panelWidth, setPanelWidth] = useState(256); // 256px is standard w-64
+
+  const startResizing = (mouseDownEvent: React.MouseEvent) => {
+    mouseDownEvent.preventDefault();
+    const startWidth = panelWidth;
+    const startX = mouseDownEvent.clientX;
+
+    const doDrag = (mouseMoveEvent: MouseEvent) => {
+      const newWidth = Math.max(180, Math.min(480, startWidth + (mouseMoveEvent.clientX - startX)));
+      setPanelWidth(newWidth);
+    };
+
+    const stopDrag = () => {
+      window.removeEventListener("mousemove", doDrag);
+      window.removeEventListener("mouseup", stopDrag);
+    };
+
+    window.addEventListener("mousemove", doDrag);
+    window.addEventListener("mouseup", stopDrag);
+  };
 
   const handleSelect = (id: string) => {
     setSelectedLayerId(id);
@@ -177,7 +197,11 @@ export default function LayersPanel() {
 
 
   return (
-    <aside data-tour="layers-panel" className="w-64 bg-white border-r border-zinc-200 flex flex-col z-10 shadow-sm">
+    <aside
+      data-tour="layers-panel"
+      className="relative bg-white border-r border-zinc-200 flex flex-col z-10 shadow-sm"
+      style={{ width: panelWidth }}
+    >
       {/* Header */}
       <div className="px-5 py-4 border-b border-zinc-200 flex items-center justify-between flex-shrink-0 bg-zinc-50/50">
         <div className="flex items-center gap-2 text-zinc-700">
@@ -289,6 +313,12 @@ export default function LayersPanel() {
           })
         )}
       </div>
+
+      {/* Resize Handle */}
+      <div
+        onMouseDown={startResizing}
+        className="absolute top-0 right-0 w-1.5 h-full cursor-col-resize hover:bg-blue-500/30 active:bg-blue-600 transition-colors z-20"
+      />
     </aside>
   );
 }

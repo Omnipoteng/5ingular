@@ -1,33 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
 @font-face {
-  font-family: 'Geist';
-  src: url('/font/Geist-SemiBold.woff2') format('woff2');
-  font-weight: 100 900;
+  font-family: 'ZTNature-Medium';
+  src: url('/font/ZTNature-Medium.woff2') format('woff2');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
+/* Universal fallback to enforce Roboto as default */
+*, ::before, ::after {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Force headings and elements inside headings to use ZTNature-Medium */
+h1, h2, h3, h4, h5, h6,
+h1 *, h2 *, h3 *, h4 *, h5 *, h6 * {
+  font-family: 'ZTNature-Medium', sans-serif !important;
+}
+
 @import "tailwindcss";
+
+/* Enable class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Semantic tokens — light mode */
+  --surface:    #f4f4f5;
+  --card-bg:    #ffffff;
+  --border:     #e4e4e7;
+  --text-1:     #09090b;
+  --text-2:     #52525b;
+  --text-3:     #a1a1aa;
+  --nav-bg:     rgba(255,255,255,0.88);
+}
+
+/* Dark mode overrides */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --surface:    #18181b;
+  --card-bg:    #1c1c1f;
+  --border:     #27272a;
+  --text-1:     #fafafa;
+  --text-2:     #a1a1aa;
+  --text-3:     #52525b;
+  --nav-bg:     rgba(10,10,10,0.88);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Roboto', sans-serif;
   --font-mono: monospace;
+
+  /* ── Neon Green (replaces all blue-* utilities) ── */
+  --color-blue-50:  #edfff0;
+  --color-blue-100: #d4ffe0;
+  --color-blue-200: #a8ffbf;
+  --color-blue-300: #6dff97;
+  --color-blue-400: #39FF14;
+  --color-blue-500: #22e605;
+  --color-blue-600: #18cc03;
+  --color-blue-700: #12a302;
+  --color-blue-800: #0d7a02;
+  --color-blue-900: #085201;
+  --color-blue-950: #042a00;
+
+  /* ── Neon Yellow (replaces all indigo-* utilities) ── */
+  --color-indigo-50:  #fffff0;
+  --color-indigo-100: #feffc7;
+  --color-indigo-200: #fdff8a;
+  --color-indigo-300: #fdff4d;
+  --color-indigo-400: #FFE500;
+  --color-indigo-500: #f5d000;
+  --color-indigo-600: #d4b200;
+  --color-indigo-700: #a88c00;
+  --color-indigo-800: #7a6600;
+  --color-indigo-900: #524400;
+  --color-indigo-950: #2b2300;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 @keyframes blink {
   50% { border-color: transparent }
+}
+
+@keyframes twBlink {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0; }
 }
 
 .animate-cursor-blink {
@@ -39,9 +107,9 @@ body {
   border-right: 2px solid currentColor;
 }
 
-/* Subtle background grid pattern for premium tech agency feel */
+/* Subtle background grid pattern with neon green tint */
 .bg-grid-pattern {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+  background-image: radial-gradient(rgba(57, 255, 20, 0.07) 1px, transparent 0);
   background-size: 24px 24px;
 }
 
@@ -53,4 +121,13 @@ body {
 
 .animate-gradient-move {
   animation: gradient-move 6s ease infinite;
+}
+
+/* Neon glow utilities */
+.neon-glow-green {
+  box-shadow: 0 0 8px #39FF14, 0 0 24px rgba(57, 255, 20, 0.35);
+}
+
+.neon-glow-yellow {
+  box-shadow: 0 0 8px #FFE500, 0 0 24px rgba(255, 229, 0, 0.35);
 }

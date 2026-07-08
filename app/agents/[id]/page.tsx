@@ -48,7 +48,7 @@ export default async function AgentProfilePage({ params }: PageProps) {
   return (
     <>
       <Navbar />
-      <main className="w-full min-h-screen bg-white">
+      <main className="w-full min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white">
         {/* Agent Profile Hero */}
         <AgentHero agent={agent} />
 
@@ -76,7 +76,7 @@ export default async function AgentProfilePage({ params }: PageProps) {
         <AgentPortfolio portfolio={agent.portfolio} />
 
         {/* Rules & Reviews Panel */}
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 border-t border-zinc-100">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 border-t border-zinc-100 dark:border-zinc-800">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <AgentRules rules={agent.rules} />
             <AgentReviews reviews={agent.reviews} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Hero from "./Hero";
 import Services from "./Services";
@@ -12,69 +12,38 @@ import CTA from "./CTA";
 import Footer from "./Footer";
 
 export default function Landing() {
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-      },
-    },
-  };
+  const [typingDone, setTypingDone] = useState(false);
 
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30, filter: "blur(6px)" },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  };
+  useEffect(() => {
+    const handler = () => setTypingDone(true);
+    window.addEventListener("typing-done", handler);
+    return () => window.removeEventListener("typing-done", handler);
+  }, []);
+
+  const fadeIn = (delayMs: number): React.CSSProperties => ({
+    opacity: typingDone ? 1 : 0,
+    transform: typingDone ? "translateY(0)" : "translateY(20px)",
+    transition: `opacity 0.7s ease ${delayMs}ms, transform 0.7s ease ${delayMs}ms`,
+  });
 
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.15 }}
-      >
-        <Navbar />
-      </motion.div>
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-        className="w-full min-h-screen bg-white"
-      >
-        <motion.div variants={itemVariants}>
-          <Hero />
-        </motion.div>
-      <motion.div variants={itemVariants}>
-        <Services />
-      </motion.div>
-      <motion.div variants={itemVariants}>
-        <Portfolio />
-      </motion.div>
-      <motion.div variants={itemVariants}>
-        <WhyChooseUs />
-      </motion.div>
-      <motion.div variants={itemVariants}>
-        <Workflow />
-      </motion.div>
-      <motion.div variants={itemVariants}>
-        <Testimonials />
-      </motion.div>
-      <motion.div variants={itemVariants}>
-        <CTA />
-      </motion.div>
-      <motion.div variants={itemVariants}>
-        <Footer />
-      </motion.div>
-      </motion.div>
+      {/* Navbar: always visible */}
+      <Navbar />
+
+      <div className="w-full min-h-screen bg-white dark:bg-zinc-950">
+        {/* Hero manages its own stagger animation */}
+        <Hero />
+
+        {/* Sections below fade in after hero animation completes */}
+        <div style={fadeIn(0)}><Services /></div>
+        <div style={fadeIn(100)}><Portfolio /></div>
+        <div style={fadeIn(200)}><WhyChooseUs /></div>
+        <div style={fadeIn(300)}><Workflow /></div>
+        <div style={fadeIn(400)}><Testimonials /></div>
+        <div style={fadeIn(500)}><CTA /></div>
+        <div style={fadeIn(600)}><Footer /></div>
+      </div>
     </>
   );
 }

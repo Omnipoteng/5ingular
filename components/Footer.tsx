@@ -98,15 +98,15 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-white border-t border-zinc-100 py-16">
+    <footer className="bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-800 py-16">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Logo & Slogan */}
           <div className="md:col-span-2 flex flex-col gap-4">
-            <span className="text-xl font-bold tracking-tight text-zinc-900">
+            <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
               5ingular<span className="text-blue-600"> Graphic</span>
             </span>
-            <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">
               Kami merancang produk digital dan pengalaman merek yang mendorong bisnis modern maju dengan tepat.
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function Footer() {
                   <li key={item.name}>
                     <a
                       href={item.href}
-                      className="text-sm text-zinc-600 hover:text-blue-600 transition-colors"
+                      className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                     >
                       {item.name}
                     </a>
@@ -134,7 +134,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Panel */}
-        <div className="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-zinc-100 gap-6">
+        <div className="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-zinc-100 dark:border-zinc-800 gap-6">
           <p className="text-xs text-zinc-400">
             &copy; {currentYear} 5ingular Graphic. All rights reserved.
           </p>
@@ -145,7 +145,7 @@ export default function Footer() {
               <a
                 key={idx}
                 href={social.href}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-blue-600 hover:bg-zinc-50 transition-colors border border-zinc-100"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors border border-zinc-100 dark:border-zinc-700"
                 aria-label={social.name}
               >
                 {social.svg}

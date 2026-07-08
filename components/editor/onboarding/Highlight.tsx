@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,7 +26,7 @@ export default function Highlight() {
           width: targetRect.width + PADDING * 2,
           height: targetRect.height + PADDING * 2,
           borderRadius: "12px",
-          border: "2.5px solid #3b82f6",
+          border: "2.5px solid #22e605",
           boxShadow: "0 0 0 3px rgba(59,130,246,0.25), 0 0 20px rgba(59,130,246,0.3)",
           pointerEvents: "none",
           zIndex: 99,

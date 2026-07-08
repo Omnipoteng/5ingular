@@ -28,6 +28,11 @@ interface EditorStore {
   // Pending action after confirm dialog resolves
   pendingNewProjectPreset: CanvasPreset | null;
 
+  // AI Co-Designer Sidebar State
+  isAiSidebarOpen: boolean;
+  chatMessages: { sender: 'user' | 'ai'; text: string; timestamp: Date }[];
+  isAiLoading: boolean;
+
   setActiveTool: (tool: ToolType) => void;
   setCanvasPreset: (preset: CanvasPreset) => void;
   setZoom: (zoom: number) => void;
@@ -47,6 +52,13 @@ interface EditorStore {
   setAboutModalOpen: (open: boolean) => void;
   setShortcutModalOpen: (open: boolean) => void;
   setPendingNewProjectPreset: (preset: CanvasPreset | null) => void;
+
+  // AI Actions
+  setAiSidebarOpen: (open: boolean) => void;
+  toggleAiSidebar: () => void;
+  addChatMessage: (msg: { sender: 'user' | 'ai'; text: string; timestamp: Date }) => void;
+  setAiLoading: (loading: boolean) => void;
+  clearChat: () => void;
 }
 
 export const useEditorStore = create<EditorStore>((set) => ({
@@ -68,6 +80,17 @@ export const useEditorStore = create<EditorStore>((set) => ({
   isShortcutModalOpen: false,
   pendingNewProjectPreset: null,
 
+  // AI State Defaults
+  isAiSidebarOpen: false,
+  chatMessages: [
+    {
+      sender: 'ai',
+      text: 'Halo! Saya AI Co-Designer Anda. ✨ Tulis perintah Anda di sini untuk mengedit canvas, contoh: "Ganti background jadi biru" atau "Tambahkan teks \'Promo Spesial\' warna putih".',
+      timestamp: new Date(),
+    }
+  ],
+  isAiLoading: false,
+
   setActiveTool:       (tool)    => set({ activeTool: tool }),
   setCanvasPreset:     (preset)  => set({ canvasPreset: preset }),
   setZoom:             (zoom)    => set({ zoom: Math.max(0.05, Math.min(8, zoom)) }),
@@ -85,6 +108,21 @@ export const useEditorStore = create<EditorStore>((set) => ({
   setAboutModalOpen:          (open)   => set({ isAboutModalOpen: open }),
   setShortcutModalOpen:       (open)   => set({ isShortcutModalOpen: open }),
   setPendingNewProjectPreset: (preset) => set({ pendingNewProjectPreset: preset }),
+
+  // AI Setters
+  setAiSidebarOpen:           (open)   => set({ isAiSidebarOpen: open }),
+  toggleAiSidebar:            ()       => set((s) => ({ isAiSidebarOpen: !s.isAiSidebarOpen })),
+  addChatMessage:             (msg)    => set((s) => ({ chatMessages: [...s.chatMessages, msg] })),
+  setAiLoading:               (loading)=> set({ isAiLoading: loading }),
+  clearChat:                  ()       => set({
+    chatMessages: [
+      {
+        sender: 'ai',
+        text: 'Halo! Saya AI Co-Designer Anda. ✨ Tulis perintah Anda di sini untuk mengedit canvas, contoh: "Ganti background jadi biru" atau "Tambahkan teks \'Promo Spesial\' warna putih".',
+        timestamp: new Date(),
+      }
+    ]
+  }),
 
   updateLayer: (id, updates) =>
     set((s) => ({

@@ -13,6 +13,7 @@ import {
   Plus,
   Minus,
   Maximize,
+  Sparkles,
 } from "lucide-react";
 import * as fabric from "fabric";
 import { useEditorStore } from "@/lib/editor/editorStore";
@@ -33,6 +34,8 @@ export default function TopToolbar() {
     isDirty,
     setDirty,
     projectName,
+    isAiSidebarOpen,
+    toggleAiSidebar,
   } = useEditorStore();
 
   const { canUndo, canRedo, undo, redo } = useHistoryStore();
@@ -201,6 +204,19 @@ export default function TopToolbar() {
               <Plus size={12} />
             </button>
           </div>
+
+          <button
+            onClick={toggleAiSidebar}
+            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all border ${
+              isAiSidebarOpen
+                ? "bg-blue-50 border-blue-200 text-blue-600 shadow-sm"
+                : "border-zinc-200 text-zinc-700 hover:bg-zinc-100"
+            }`}
+            title="Tanya AI Co-Designer"
+          >
+            <Sparkles size={14} className={isAiSidebarOpen ? "animate-pulse" : ""} />
+            <span>AI Designer</span>
+          </button>
 
           <button
             onClick={handleSave}

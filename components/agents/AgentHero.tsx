@@ -25,11 +25,11 @@ export default function AgentHero({ agent }: AgentHeroProps) {
   };
 
   return (
-    <section className="bg-white border-b border-zinc-100 pt-28 pb-16">
+    <section className="bg-white dark:bg-zinc-950 border-b border-zinc-100 dark:border-zinc-800 pt-28 pb-16">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex flex-col lg:flex-row gap-12 items-center">
           {/* Avatar Area */}
-          <div className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-3xl overflow-hidden border border-zinc-200 bg-zinc-50 shadow-md flex-shrink-0">
+          <div className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 shadow-md flex-shrink-0">
             <Image
               src={agent.avatar}
               alt={agent.name}
@@ -38,7 +38,7 @@ export default function AgentHero({ agent }: AgentHeroProps) {
               className="object-cover"
             />
             {/* Number badge */}
-            <div className="absolute top-4 left-4 bg-zinc-950/85 backdrop-blur-sm border border-white/10 rounded-lg px-2.5 py-1 text-[10px] font-bold text-white tracking-widest uppercase">
+            <div className="absolute top-4 left-4 bg-zinc-950/80 backdrop-blur-sm border border-white/10 rounded-lg px-2.5 py-1 text-[10px] font-bold text-white tracking-widest uppercase">
               {agent.number}
             </div>
           </div>
@@ -48,26 +48,26 @@ export default function AgentHero({ agent }: AgentHeroProps) {
             <div className="flex flex-col gap-3">
               {/* Availability */}
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 border border-blue-100/60 px-3 py-1 rounded-full">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-zinc-800 border border-blue-100/60 dark:border-zinc-700 px-3 py-1 rounded-full">
                   {agent.role}
                 </span>
-                <div className="bg-zinc-50 border border-zinc-200 rounded-full px-3 py-1 flex items-center gap-1.5 shadow-sm">
+                <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-full px-3 py-1 flex items-center gap-1.5 shadow-sm">
                   <span className={`w-1.5 h-1.5 rounded-full ${getStatusColor(agent.status)}`} />
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-300">
                     {agent.status}
                   </span>
                 </div>
               </div>
 
               {/* Name */}
-              <h1 className="text-4xl sm:text-5xl font-bold text-zinc-900 tracking-tight">
+              <h1 className="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-white tracking-tight">
                 {agent.name}
               </h1>
 
               {/* Location */}
               {agent.location && (
-                <div className="flex items-center justify-center lg:justify-start gap-1.5 text-zinc-500 text-sm">
-                  <MapPin size={14} className="text-zinc-400" />
+                <div className="flex items-center justify-center lg:justify-start gap-1.5 text-zinc-500 dark:text-zinc-400 text-sm">
+                  <MapPin size={14} className="text-zinc-400 dark:text-zinc-500" />
                   <span>{agent.location}</span>
                 </div>
               )}
@@ -77,14 +77,14 @@ export default function AgentHero({ agent }: AgentHeroProps) {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
               <a
                 href="/hire"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-full shadow-lg shadow-blue-200 w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-full shadow-lg shadow-blue-200 dark:shadow-none w-full sm:w-auto"
               >
                 Hire Agent
                 <ArrowUpRight size={16} />
               </a>
               <a
                 href="mailto:hello@5ingular.graphic"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-zinc-700 bg-zinc-50 hover:bg-zinc-100 transition-colors rounded-full border border-zinc-200 w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-200 bg-zinc-50 dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors rounded-full border border-zinc-200 dark:border-zinc-700 w-full sm:w-auto"
               >
                 <MessageSquare size={15} />
                 Contact

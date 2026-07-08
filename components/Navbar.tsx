@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight, ChevronDown } from "lucide-react";
 import EditorIntroModal from "./EditorIntroModal";
+import ThemeToggle from "./ThemeToggle";
 
 /* ─── Mega Menu Data ────────────────────────────────────────────────── */
 const megaMenus: Record<
@@ -116,22 +117,22 @@ function DropdownPanel({
     >
       {/* Arrow */}
       <div className="flex justify-center mb-[-1px]">
-        <div className="w-3 h-3 rotate-45 bg-white border-l border-t border-zinc-200" />
+        <div className="w-3 h-3 rotate-45 bg-white dark:bg-zinc-900 border-l border-t border-zinc-200 dark:border-zinc-700" />
       </div>
 
-      <div className="bg-white border border-zinc-200 rounded-2xl shadow-xl shadow-zinc-200/60 overflow-hidden p-6 flex gap-10 min-w-max">
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-xl shadow-zinc-200/60 dark:shadow-zinc-900/60 overflow-hidden p-6 flex gap-10 min-w-max">
         {sections.map((section) => (
           <div key={section.heading} className="flex flex-col gap-3 min-w-[180px]">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 pb-1 border-b border-zinc-100">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 pb-1 border-b border-zinc-100 dark:border-zinc-800">
               {section.heading}
             </p>
             {section.items.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="group flex flex-col gap-0.5 px-3 py-2.5 rounded-xl hover:bg-blue-50 transition-colors"
+                className="group flex flex-col gap-0.5 px-3 py-2.5 rounded-xl hover:bg-blue-50 dark:hover:bg-zinc-800 transition-colors"
               >
-                <span className="text-sm font-semibold text-zinc-900 group-hover:text-blue-600 transition-colors flex items-center gap-1">
+                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1">
                   {item.label}
                   <ArrowUpRight
                     size={12}
@@ -180,14 +181,14 @@ export default function Navbar() {
       <nav
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? "bg-white/85 backdrop-blur-md border-b border-zinc-100 py-3 shadow-sm"
+            ? "bg-white/85 dark:bg-zinc-950/85 backdrop-blur-md border-b border-zinc-100 dark:border-zinc-800 py-3 shadow-sm"
             : "bg-transparent py-5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
-            <span className="text-xl font-bold tracking-tight text-zinc-900 transition-colors group-hover:text-blue-600">
+            <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white transition-colors group-hover:text-blue-600">
               5ingular<span className="text-blue-600"> Graphic</span>
             </span>
           </Link>
@@ -212,16 +213,16 @@ export default function Navbar() {
                         setIsIntroOpen(true);
                       }
                     }}
-                    className={`inline-flex items-center gap-1 px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    className={`inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                       isActive
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
+                        ? "text-blue-600 bg-blue-50 dark:bg-zinc-800"
+                        : "text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800"
                     }`}
                   >
                     {link.name}
                     {hasMega && (
                       <ChevronDown
-                        size={13}
+                        size={12}
                         className={`transition-transform duration-200 ${isActive ? "rotate-180 text-blue-600" : ""}`}
                       />
                     )}
@@ -244,22 +245,24 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* CTA */}
-          <div className="hidden md:flex">
+          {/* Theme Toggle + CTA */}
+          <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
             <Link
               href="/collaboration"
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-full shadow-sm shadow-blue-200"
+              className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2 text-[11px] font-bold uppercase tracking-widest text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-full shadow-sm shadow-blue-200"
             >
               Ayo Mulai
-              <ArrowUpRight size={13} />
+              <ArrowUpRight size={12} />
             </Link>
           </div>
 
           {/* Mobile Toggle */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="text-zinc-600 hover:text-zinc-950 p-2 focus:outline-none"
+              className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white p-2 focus:outline-none"
               aria-label="Toggle Menu"
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -276,7 +279,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-[60px] left-0 right-0 z-30 bg-white/97 backdrop-blur-md border-b border-zinc-100 shadow-lg md:hidden overflow-y-auto max-h-[80vh]"
+            className="fixed top-[60px] left-0 right-0 z-30 bg-white/97 dark:bg-zinc-950/97 backdrop-blur-md border-b border-zinc-100 dark:border-zinc-800 shadow-lg md:hidden overflow-y-auto max-h-[80vh]"
           >
             <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-1">
               {navLinks.map((link) => (
@@ -290,7 +293,7 @@ export default function Navbar() {
                       setIsIntroOpen(true);
                     }
                   }}
-                  className="flex items-center justify-between px-4 py-3 text-sm font-medium text-zinc-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+                  className="flex items-center justify-between px-4 py-3 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-zinc-800 rounded-xl transition-colors"
                 >
                   {link.name}
                   <ArrowUpRight size={14} className="text-zinc-300" />
@@ -304,11 +307,11 @@ export default function Navbar() {
                 )
               )}
 
-              <div className="mt-4 pt-4 border-t border-zinc-100">
+              <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
                 <Link
                   href="/collaboration"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full py-3 text-xs font-semibold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-full shadow-sm shadow-blue-200"
+                  className="flex items-center justify-center gap-2 w-full py-3 text-xs font-semibold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-full shadow-sm shadow-blue-200 dark:shadow-none"
                 >
                   Ayo Mulai
                   <ArrowUpRight size={13} />

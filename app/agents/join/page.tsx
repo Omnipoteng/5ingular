@@ -174,14 +174,14 @@ export default function JoinAgentPage() {
   return (
     <>
       <Navbar />
-      <main className="w-full min-h-screen bg-white bg-grid-pattern overflow-hidden">
+      <main className="w-full min-h-screen bg-white dark:bg-zinc-950 bg-grid-pattern overflow-hidden">
 
         {/* ──────────────────────────────────────────────────────────────────
             SECTION 1: HERO / INTRODUCTION
         ────────────────────────────────────────────────────────────────── */}
         <section className="relative pt-36 pb-24 overflow-hidden">
           {/* Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-blue-50/60 blur-3xl -z-10" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-blue-50/60 dark:bg-blue-950/20 blur-3xl -z-10" />
 
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="flex flex-col lg:flex-row items-center gap-16">
@@ -192,10 +192,10 @@ export default function JoinAgentPage() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200/50 shadow-sm self-start"
+                  className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-zinc-800 border border-blue-200/50 dark:border-zinc-700 shadow-sm self-start"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">
                     Agent Program · 5ingular Graphic
                   </span>
                 </motion.div>
@@ -204,17 +204,17 @@ export default function JoinAgentPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
-                  className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 leading-tight"
+                  className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 dark:text-white leading-tight"
                 >
                   Jadilah Bagian dari<br />
-                  <span className="text-blue-600">Tim Kreatif Kami.</span>
+                  <span className="text-blue-600 dark:text-blue-400">Tim Kreatif Kami.</span>
                 </motion.h1>
 
                 <motion.p
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  className="text-base sm:text-lg text-zinc-500 font-light leading-relaxed max-w-xl"
+                  className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-xl"
                 >
                   5ingular Graphic membuka pendaftaran agen kreatif profesional. Bergabunglah dengan ekosistem kami dan dapatkan akses ke klien premium, proyek eksklusif, infrastruktur alat desain mutakhir, serta perlindungan HAKI penuh untuk setiap karya Anda.
                 </motion.p>
@@ -234,7 +234,7 @@ export default function JoinAgentPage() {
                   </a>
                   <a
                     href="#syarat-ketentuan"
-                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-zinc-700 bg-zinc-50 hover:bg-zinc-100 transition-colors rounded-full border border-zinc-200"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-200 bg-zinc-50 dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors rounded-full border border-zinc-200 dark:border-zinc-700"
                   >
                     Baca Syarat & Ketentuan
                   </a>
@@ -245,7 +245,7 @@ export default function JoinAgentPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.7, delay: 0.4 }}
-                  className="flex flex-wrap gap-8 pt-6 border-t border-zinc-100"
+                  className="flex flex-wrap gap-8 pt-6 border-t border-zinc-100 dark:border-zinc-800"
                 >
                   {[
                     { val: "4+", label: "Agent Aktif" },
@@ -253,8 +253,8 @@ export default function JoinAgentPage() {
                     { val: "100%", label: "HAKI Terlindungi" },
                   ].map((s) => (
                     <div key={s.label} className="flex flex-col gap-0.5">
-                      <span className="text-2xl font-bold text-zinc-900">{s.val}</span>
-                      <span className="text-xs text-zinc-500 font-light">{s.label}</span>
+                      <span className="text-2xl font-bold text-zinc-900 dark:text-white">{s.val}</span>
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400 font-light">{s.label}</span>
                     </div>
                   ))}
                 </motion.div>
@@ -269,15 +269,15 @@ export default function JoinAgentPage() {
                     variants={fadeUp}
                     initial="hidden"
                     animate="show"
-                    className="p-5 bg-white border border-zinc-200/70 hover:border-blue-200 rounded-2xl hover:shadow-md hover:shadow-blue-50/30 transition-all group"
+                    className="p-5 bg-white dark:bg-zinc-900 border border-zinc-200/70 dark:border-zinc-800 hover:border-blue-200 dark:hover:border-blue-800 rounded-2xl hover:shadow-md hover:shadow-blue-50/30 dark:hover:shadow-none transition-all group"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center mb-3 group-hover:bg-blue-600 transition-colors">
+                    <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center mb-3 group-hover:bg-blue-600 transition-colors">
                       {React.cloneElement(b.icon, {
-                        className: "w-4 h-4 text-blue-600 group-hover:text-white transition-colors",
+                        className: "w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:text-white transition-colors",
                       })}
                     </div>
-                    <h3 className="text-xs font-bold text-zinc-900 mb-1">{b.title}</h3>
-                    <p className="text-[11px] text-zinc-500 font-light leading-relaxed">{b.desc}</p>
+                    <h3 className="text-xs font-bold text-zinc-900 dark:text-white mb-1">{b.title}</h3>
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-light leading-relaxed">{b.desc}</p>
                   </motion.div>
                 ))}
               </div>
@@ -288,17 +288,17 @@ export default function JoinAgentPage() {
         {/* ──────────────────────────────────────────────────────────────────
             SECTION 2: SYARAT & KETENTUAN
         ────────────────────────────────────────────────────────────────── */}
-        <section id="syarat-ketentuan" className="py-24 bg-zinc-50/60 scroll-mt-24">
+        <section id="syarat-ketentuan" className="py-24 bg-zinc-50/60 dark:bg-zinc-900/60 scroll-mt-24">
           <div className="max-w-4xl mx-auto px-6 md:px-12 flex flex-col gap-12">
             {/* Header */}
             <div className="flex flex-col gap-3">
               <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
                 Syarat & Ketentuan
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 dark:text-white">
                 Apa yang Kami Harapkan dari Anda
               </h2>
-              <p className="text-sm text-zinc-500 font-light leading-relaxed max-w-xl">
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 font-light leading-relaxed max-w-xl">
                 Sebelum mendaftar, pastikan Anda telah membaca dan memahami seluruh persyaratan berikut. Dengan mengirimkan formulir, Anda dianggap telah menyetujui semua poin di bawah ini.
               </p>
             </div>
@@ -308,8 +308,8 @@ export default function JoinAgentPage() {
               {TERMS.map((term, idx) => (
                 <div
                   key={idx}
-                  className={`bg-white border rounded-2xl overflow-hidden transition-all ${
-                    expandedTerm === idx ? "border-blue-300 shadow-sm shadow-blue-50" : "border-zinc-200"
+                  className={`bg-white dark:bg-zinc-900 border rounded-2xl overflow-hidden transition-all ${
+                    expandedTerm === idx ? "border-blue-300 dark:border-blue-500 shadow-sm dark:shadow-none" : "border-zinc-200 dark:border-zinc-800"
                   }`}
                 >
                   <button
@@ -317,10 +317,10 @@ export default function JoinAgentPage() {
                     onClick={() => setExpandedTerm(expandedTerm === idx ? null : idx)}
                   >
                     <div className="flex items-center gap-4">
-                      <span className="text-xs font-bold font-mono text-blue-600 flex-shrink-0">
+                      <span className="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 flex-shrink-0">
                         {term.num}
                       </span>
-                      <span className="text-sm font-semibold text-zinc-900">{term.title}</span>
+                      <span className="text-sm font-semibold text-zinc-900 dark:text-white">{term.title}</span>
                     </div>
                     {expandedTerm === idx ? (
                       <ChevronUp size={16} className="text-zinc-400 flex-shrink-0" />
@@ -337,7 +337,7 @@ export default function JoinAgentPage() {
                         transition={{ duration: 0.25 }}
                         className="overflow-hidden"
                       >
-                        <p className="px-5 pb-5 text-xs text-zinc-500 font-light leading-relaxed border-t border-zinc-100 pt-4">
+                        <p className="px-5 pb-5 text-xs text-zinc-500 dark:text-zinc-400 font-light leading-relaxed border-t border-zinc-100 dark:border-zinc-800 pt-4">
                           {term.desc}
                         </p>
                       </motion.div>
@@ -358,8 +358,8 @@ export default function JoinAgentPage() {
                 "Bersedia mengikuti onboarding",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-2.5">
-                  <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                  <span className="text-xs text-zinc-600 font-light">{item}</span>
+                  <CheckCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                  <span className="text-xs text-zinc-600 dark:text-zinc-400 font-light">{item}</span>
                 </div>
               ))}
             </div>
@@ -377,10 +377,10 @@ export default function JoinAgentPage() {
               <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
                 Formulir Pendaftaran
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900">
-                Isi Data Diri Anda
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                Formulir Pendaftaran
               </h2>
-              <p className="text-sm text-zinc-500 font-light leading-relaxed">
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 font-light leading-relaxed">
                 Semua kolom bertanda wajib harus diisi. Aplikasi yang tidak lengkap tidak akan diproses.
               </p>
             </div>
@@ -397,8 +397,8 @@ export default function JoinAgentPage() {
                     <CheckCircle className="w-8 h-8 text-green-600" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <h3 className="text-xl font-bold text-zinc-900">Aplikasi Terkirim!</h3>
-                    <p className="text-sm text-zinc-500 font-light max-w-sm leading-relaxed">
+                    <h3 className="text-xl font-bold text-zinc-900 dark:text-white">Aplikasi Terkirim!</h3>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 font-light max-w-sm leading-relaxed">
                       Terima kasih, <strong>{form.fullName}</strong>. Tim kami akan meninjau aplikasi Anda dan menghubungi via email <strong>{form.email}</strong> dalam 3–7 hari kerja.
                     </p>
                   </div>
@@ -419,7 +419,7 @@ export default function JoinAgentPage() {
 
                 {/* ── Informasi Dasar ── */}
                 <fieldset className="flex flex-col gap-5">
-                  <legend className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">
+                  <legend className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
                     Informasi Pribadi
                   </legend>
 
@@ -468,22 +468,22 @@ export default function JoinAgentPage() {
 
                 {/* ── Spesialisasi & Pengalaman ── */}
                 <fieldset className="flex flex-col gap-5">
-                  <legend className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">
+                  <legend className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
                     Keahlian & Pengalaman
                   </legend>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {/* Specialization */}
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor="specialization" className="text-xs font-semibold text-zinc-700">
-                        Spesialisasi Utama <span className="text-blue-600">*</span>
+                      <label htmlFor="specialization" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                        Spesialisasi Utama <span className="text-blue-600 dark:text-blue-400">*</span>
                       </label>
                       <select
                         id="specialization"
                         value={form.specialization}
                         onChange={(e) => set("specialization", e.target.value)}
-                        className={`px-3.5 py-2.5 bg-white border rounded-xl text-xs text-zinc-800 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${
-                          errors.specialization ? "border-red-400" : "border-zinc-200"
+                        className={`px-3.5 py-2.5 bg-white dark:bg-zinc-800 border rounded-xl text-xs text-zinc-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${
+                          errors.specialization ? "border-red-400" : "border-zinc-200 dark:border-zinc-700"
                         }`}
                       >
                         <option value="">-- Pilih spesialisasi --</option>
@@ -496,15 +496,15 @@ export default function JoinAgentPage() {
 
                     {/* Experience */}
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor="experience" className="text-xs font-semibold text-zinc-700">
-                        Lama Pengalaman <span className="text-blue-600">*</span>
+                      <label htmlFor="experience" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                        Lama Pengalaman <span className="text-blue-600 dark:text-blue-400">*</span>
                       </label>
                       <select
                         id="experience"
                         value={form.experience}
                         onChange={(e) => set("experience", e.target.value)}
-                        className={`px-3.5 py-2.5 bg-white border rounded-xl text-xs text-zinc-800 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${
-                          errors.experience ? "border-red-400" : "border-zinc-200"
+                        className={`px-3.5 py-2.5 bg-white dark:bg-zinc-800 border rounded-xl text-xs text-zinc-800 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 ${
+                          errors.experience ? "border-red-400" : "border-zinc-200 dark:border-zinc-700"
                         }`}
                       >
                         <option value="">-- Pilih pengalaman --</option>
@@ -519,7 +519,7 @@ export default function JoinAgentPage() {
 
                 {/* ── Portofolio & Profil ── */}
                 <fieldset className="flex flex-col gap-5">
-                  <legend className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">
+                  <legend className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
                     Portofolio & Profil Sosial
                   </legend>
 
@@ -553,7 +553,7 @@ export default function JoinAgentPage() {
 
                 {/* ── Bio & Motivasi ── */}
                 <fieldset className="flex flex-col gap-5">
-                  <legend className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">
+                  <legend className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
                     Tentang Diri Anda
                   </legend>
 
@@ -589,9 +589,9 @@ export default function JoinAgentPage() {
                       onChange={(e) => setAgreed(e.target.checked)}
                       className="mt-0.5 w-4 h-4 rounded border-zinc-300 text-blue-600 accent-blue-600 flex-shrink-0"
                     />
-                    <span className="text-xs text-zinc-600 font-light leading-relaxed group-hover:text-zinc-800 transition-colors">
+                    <span className="text-xs text-zinc-600 dark:text-zinc-400 font-light leading-relaxed group-hover:text-zinc-800 dark:group-hover:text-zinc-200 transition-colors">
                       Saya telah membaca, memahami, dan menyetujui seluruh{" "}
-                      <a href="#syarat-ketentuan" className="text-blue-600 font-semibold hover:underline">
+                      <a href="#syarat-ketentuan" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                         Syarat & Ketentuan
                       </a>{" "}
                       Program Agent 5ingular Graphic yang tercantum di atas. Saya memastikan bahwa seluruh data yang saya isi adalah benar dan sah.
@@ -631,8 +631,8 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-xs font-semibold text-zinc-700">
-        {label} {required && <span className="text-blue-600">*</span>}
+      <label htmlFor={id} className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+        {label} {required && <span className="text-blue-600 dark:text-blue-400">*</span>}
       </label>
       <input
         id={id}
@@ -640,8 +640,8 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`px-3.5 py-2.5 bg-white border rounded-xl text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all ${
-          error ? "border-red-400 bg-red-50/30" : "border-zinc-200"
+        className={`px-3.5 py-2.5 bg-white dark:bg-zinc-800 border rounded-xl text-xs text-zinc-800 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+          error ? "border-red-400 bg-red-50/30 dark:bg-red-950/20" : "border-zinc-200 dark:border-zinc-700"
         }`}
       />
       {error && <FieldError msg={error} />}
@@ -657,8 +657,8 @@ function TextareaField({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-xs font-semibold text-zinc-700">
-        {label} {required && <span className="text-blue-600">*</span>}
+      <label htmlFor={id} className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+        {label} {required && <span className="text-blue-600 dark:text-blue-400">*</span>}
       </label>
       <textarea
         id={id}
@@ -666,8 +666,8 @@ function TextareaField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`px-3.5 py-2.5 bg-white border rounded-xl text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none ${
-          error ? "border-red-400 bg-red-50/30" : "border-zinc-200"
+        className={`px-3.5 py-2.5 bg-white dark:bg-zinc-800 border rounded-xl text-xs text-zinc-800 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none ${
+          error ? "border-red-400 bg-red-50/30 dark:bg-red-950/20" : "border-zinc-200 dark:border-zinc-700"
         }`}
       />
       {error && <FieldError msg={error} />}

@@ -12,7 +12,7 @@ interface GradientTextProps {
 export default function GradientText({
   children,
   className = "",
-  colors = ["#2563eb", "#3b82f6", "#6366f1", "#3b82f6", "#2563eb"], // blue -> light blue -> indigo -> blue
+  colors = ["#39FF14", "#FFE500", "#39FF14", "#FFE500", "#39FF14"], // neon green -> neon yellow -> neon green
   animationSpeed = 6,
 }: GradientTextProps) {
   const gradientStyle = {
@@ -23,7 +23,7 @@ export default function GradientText({
   return (
     <span
       style={gradientStyle}
-      className={`bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-move inline-block ${className}`}
+      className={`bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-move ${className}`}
     >
       {children}
     </span>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
@@ -112,7 +112,7 @@ export default function CanvasWorkspace() {
       backgroundColor: "#d4d4d4",
       preserveObjectStacking: true,
       selectionColor: "rgba(37, 99, 235, 0.08)",
-      selectionBorderColor: "#2563eb",
+      selectionBorderColor: "#18cc03",
       selectionLineWidth: 1,
     });
 
@@ -375,7 +375,7 @@ export default function CanvasWorkspace() {
             top: pointer.y,
             width: 1,
             height: 1,
-            fill: "#3b82f6",
+            fill: "#22e605",
             strokeWidth: 0,
             originX: "left",
             originY: "top",

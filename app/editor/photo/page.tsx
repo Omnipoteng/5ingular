@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useCallback, useEffect, useState } from "react";
 import * as fabric from "fabric";
@@ -12,6 +12,7 @@ import LayersPanel from "../components/LayersPanel";
 import CanvasWorkspace from "../components/CanvasWorkspace";
 import RightPanel from "../components/RightPanel";
 import StatusBar from "../components/StatusBar";
+import AIChatSidebar from "../components/AIChatSidebar";
 import OnboardingProvider from "@/components/editor/onboarding/OnboardingProvider";
 import OnboardingOverlay from "@/components/editor/onboarding/OnboardingOverlay";
 import { AlertCircle, X, FolderOpen, Palette, FileText } from "lucide-react";
@@ -337,7 +338,7 @@ function EditorApp() {
     isAboutModalOpen, setAboutModalOpen,
     isShortcutModalOpen, setShortcutModalOpen,
   } = useEditorStore();
-  const { undo, redo, canUndo, canRedo, clear: clearHistory } = useHistoryStore();
+  const { undo, redo, canUndo, canRedo, clear: clearHistory, pushSnapshot } = useHistoryStore();
 
   const [mobileWarning, setMobileWarning] = useState(false);
 
@@ -370,6 +371,90 @@ function EditorApp() {
       (canvas as any).historyLoading = false;
     });
   }, [canvasRef]);
+
+  // ── AI Co-Designer Command Execution ──────────────────────────────────────
+  const handleExecuteCommand = useCallback((command: { tool: string; args: any }) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    let modified = false;
+
+    switch (command.tool) {
+      case "changeBackgroundColor": {
+        const bg = canvas.getObjects().find((o: any) => o.id === DOC_BG_ID);
+        if (bg && command.args?.color) {
+          bg.set("fill", command.args.color);
+          modified = true;
+        }
+        break;
+      }
+
+      case "addText": {
+        const { text, fill, fontSize } = command.args || {};
+        if (text) {
+          const textObj = new fabric.Textbox(text, {
+            left: 50,
+            top: 50,
+            fontSize: fontSize || 32,
+            fill: fill || "#000000",
+            fontFamily: "Geist",
+            id: `l-${Date.now()}-${Math.random()}`,
+          } as any);
+          canvas.add(textObj);
+          canvas.setActiveObject(textObj);
+          modified = true;
+        }
+        break;
+      }
+
+      case "addRectangle": {
+        const { width, height, fill } = command.args || {};
+        const rectObj = new fabric.Rect({
+          left: 100,
+          top: 100,
+          width: width || 150,
+          height: height || 100,
+          fill: fill || "#22e605",
+          id: `l-${Date.now()}-${Math.random()}`,
+        } as any);
+        canvas.add(rectObj);
+        canvas.setActiveObject(rectObj);
+        modified = true;
+        break;
+      }
+
+      case "addCircle": {
+        const { radius, fill } = command.args || {};
+        const circleObj = new fabric.Circle({
+          left: 100,
+          top: 100,
+          radius: radius || 50,
+          fill: fill || "#10b981",
+          id: `l-${Date.now()}-${Math.random()}`,
+        } as any);
+        canvas.add(circleObj);
+        canvas.setActiveObject(circleObj);
+        modified = true;
+        break;
+      }
+
+      case "clearCanvas": {
+        const objs = canvas.getObjects().filter((o: any) => o.id !== DOC_BG_ID);
+        objs.forEach((o) => canvas.remove(o));
+        modified = true;
+        break;
+      }
+
+      default:
+        console.warn("Unknown AI tool call:", command.tool);
+    }
+
+    if (modified) {
+      canvas.renderAll();
+      setDirty(true);
+      pushSnapshot(JSON.stringify((canvas as any).toJSON(["id", "name"])));
+    }
+  }, [canvasRef, setDirty, pushSnapshot]);
 
   // ── Save to localStorage ──────────────────────────────────────────────────
   const handleSave = useCallback(() => {
@@ -590,6 +675,7 @@ function EditorApp() {
         <LayersPanel />
         <CanvasWorkspace />
         <RightPanel />
+        <AIChatSidebar onExecuteCommand={handleExecuteCommand} />
       </div>
 
       {/* Status bar */}
